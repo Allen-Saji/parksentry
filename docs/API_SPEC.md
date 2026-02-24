@@ -117,6 +117,23 @@ Response:
 }
 ```
 
+### GET `/api/jobs/:jobId/candidates`
+Response:
+```json
+{
+  "jobId": "job_...",
+  "total": 120,
+  "candidates": [
+    {
+      "id": "cand_...",
+      "candidate_type": "frame_sample",
+      "event_time": "2026-02-24T00:10:03.000Z",
+      "payload": { "frame": "frame_000123.jpg" }
+    }
+  ]
+}
+```
+
 ---
 
 ## Events

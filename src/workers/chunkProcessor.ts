@@ -4,6 +4,8 @@ import { logger } from '../config/logger';
 import { getJobById } from '../db/repositories/jobsRepo';
 import { findAssetPathBySource } from '../db/repositories/assetsQueryRepo';
 import { runChunkFrameExtraction } from '../services/media/chunkRunner';
+import { buildChunkCandidates } from '../services/vision/frameCandidateExtractor';
+import { insertCandidates } from '../db/repositories/candidatesRepo';
 
 export async function processOneChunk() {
   const leased = await leaseNextChunk();
@@ -24,14 +26,24 @@ export async function processOneChunk() {
       throw new Error(`No uploaded asset found for job ${leased.parent_job_id}`);
     }
 
+    const fps = 2;
     const extraction = await runChunkFrameExtraction({
       inputPath,
       jobId: leased.parent_job_id,
       chunkId: leased.id,
       startSecond: leased.start_second,
       endSecond: leased.end_second,
-      fps: 2
+      fps
     });
+
+    const candidates = await buildChunkCandidates({
+      jobId: leased.parent_job_id,
+      chunkId: leased.id,
+      chunkStartSecond: leased.start_second,
+      outputDir: extraction.outputDir,
+      fps
+    });
+    await insertCandidates(candidates);
 
     await markChunkCompleted(leased.id);
     const parent = await refreshParentJobProgress(leased.parent_job_id);
@@ -41,6 +53,7 @@ export async function processOneChunk() {
       jobId: leased.parent_job_id,
       chunkId: leased.id,
       framesExtracted: extraction.framesExtracted,
+      candidatesCreated: candidates.length,
       outputDir: extraction.outputDir,
       parent
     };

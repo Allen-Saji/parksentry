@@ -36,7 +36,13 @@ Prerequisites:
 - Uploaded files stored under `var/uploads/<cameraId>/...`
 - Served via static prefix `/files/`
 
-## Production hardening checklist
+## Candidate extraction flow
+
+- Worker extracts chunk frames with ffmpeg
+- Worker creates `frame_sample` candidates from sampled frames
+- Candidate records are stored in `event_candidates` for downstream detection stages
+
+## Hardening checklist
 
 - Move uploads to object storage (S3/R2)
 - Add authn/authz for all API routes
