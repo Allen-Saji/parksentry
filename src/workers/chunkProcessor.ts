@@ -6,6 +6,8 @@ import { findAssetPathBySource } from '../db/repositories/assetsQueryRepo';
 import { runChunkFrameExtraction } from '../services/media/chunkRunner';
 import { buildChunkCandidates } from '../services/vision/frameCandidateExtractor';
 import { insertCandidates } from '../db/repositories/candidatesRepo';
+import { detectVehiclesFromChunkFrames } from '../services/vision/mockDetector';
+import { insertDetections } from '../db/repositories/detectionsRepo';
 
 export async function processOneChunk() {
   const leased = await leaseNextChunk();
@@ -45,6 +47,13 @@ export async function processOneChunk() {
     });
     await insertCandidates(candidates);
 
+    const detections = await detectVehiclesFromChunkFrames({
+      jobId: leased.parent_job_id,
+      chunkId: leased.id,
+      frameDir: extraction.outputDir
+    });
+    await insertDetections(detections);
+
     await markChunkCompleted(leased.id);
     const parent = await refreshParentJobProgress(leased.parent_job_id);
 
@@ -54,6 +63,7 @@ export async function processOneChunk() {
       chunkId: leased.id,
       framesExtracted: extraction.framesExtracted,
       candidatesCreated: candidates.length,
+      detectionsCreated: detections.length,
       outputDir: extraction.outputDir,
       parent
     };

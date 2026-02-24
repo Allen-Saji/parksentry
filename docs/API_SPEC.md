@@ -134,6 +134,23 @@ Response:
 }
 ```
 
+### GET `/api/jobs/:jobId/detections`
+Response:
+```json
+{
+  "jobId": "job_...",
+  "total": 80,
+  "detections": [
+    {
+      "id": "det_...",
+      "detected_class": "car",
+      "confidence": 0.88,
+      "frame_path": ".../frame_000120.jpg"
+    }
+  ]
+}
+```
+
 ---
 
 ## Events

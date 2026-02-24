@@ -15,6 +15,7 @@ import { registerWorkerRoutes } from './routes/worker';
 import { registerChunkRoutes } from './routes/chunks';
 import { registerMediaRoutes } from './routes/media';
 import { registerCandidateRoutes } from './routes/candidates';
+import { registerDetectionRoutes } from './routes/detections';
 import { registerAuth } from './plugins/auth';
 import { registerRateLimit } from './plugins/rateLimit';
 
@@ -47,6 +48,7 @@ export async function buildApp() {
   registerChunkRoutes(app);
   registerMediaRoutes(app);
   registerCandidateRoutes(app);
+  registerDetectionRoutes(app);
   registerEventRoutes(app);
   registerDashboardRoutes(app);
   registerWorkerRoutes(app);
