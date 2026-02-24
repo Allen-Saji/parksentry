@@ -103,6 +103,20 @@ Response:
 }
 ```
 
+### POST `/api/videos/probe`
+Request:
+```json
+{ "assetId": "asset_..." }
+```
+Response:
+```json
+{
+  "assetId": "asset_...",
+  "sourceName": "parking.mp4",
+  "probe": { "durationSeconds": 7200, "width": 1920, "height": 1080, "fps": 30 }
+}
+```
+
 ---
 
 ## Events

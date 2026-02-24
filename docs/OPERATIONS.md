@@ -2,6 +2,10 @@
 
 ## Local startup
 
+Prerequisites:
+- PostgreSQL
+- ffmpeg + ffprobe installed and available on PATH
+
 1. Ensure PostgreSQL is running
 2. Set env:
    - `DATABASE_URL=postgresql://parksentry:parksentry@127.0.0.1:5432/parksentry`

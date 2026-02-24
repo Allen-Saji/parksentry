@@ -46,7 +46,12 @@ export function registerUploadRoutes(app: FastifyInstance) {
           cameraId: meta.cameraId,
           sourceName: meta.sourceName
         }),
-      () => ({ ...mockJob, id: `job_${randomUUID()}` })
+      () => ({
+        id: `job_${randomUUID()}`,
+        status: mockJob.status,
+        progress: mockJob.progress,
+        stage: mockJob.stage ?? 'upload_received'
+      })
     );
 
     const chunks = makeChunkPlan(job.id, meta.durationSeconds, 300);

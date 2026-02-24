@@ -24,5 +24,7 @@ export const mockJob: JobRecord = {
   id: 'job_mock',
   status: 'queued',
   progress: 0,
-  stage: 'upload_received'
+  stage: 'upload_received',
+  camera_id: null,
+  source_name: null
 };

@@ -1,18 +1,38 @@
 import { leaseNextChunk, markChunkCompleted, markChunkFailed } from '../db/repositories/chunkLeaseRepo';
 import { refreshParentJobProgress } from '../db/repositories/jobAggregateRepo';
 import { logger } from '../config/logger';
-
-async function processChunkSimulation(chunkId: string) {
-  await new Promise((r) => setTimeout(r, 500));
-  return { chunkId };
-}
+import { getJobById } from '../db/repositories/jobsRepo';
+import { findAssetPathBySource } from '../db/repositories/assetsQueryRepo';
+import { runChunkFrameExtraction } from '../services/media/chunkRunner';
 
 export async function processOneChunk() {
   const leased = await leaseNextChunk();
   if (!leased) return { worked: false };
 
   try {
-    await processChunkSimulation(leased.id);
+    const job = await getJobById(leased.parent_job_id);
+    if (!job) {
+      throw new Error(`Parent job not found: ${leased.parent_job_id}`);
+    }
+
+    const inputPath = await findAssetPathBySource({
+      cameraId: job.camera_id,
+      sourceName: job.source_name
+    });
+
+    if (!inputPath) {
+      throw new Error(`No uploaded asset found for job ${leased.parent_job_id}`);
+    }
+
+    const extraction = await runChunkFrameExtraction({
+      inputPath,
+      jobId: leased.parent_job_id,
+      chunkId: leased.id,
+      startSecond: leased.start_second,
+      endSecond: leased.end_second,
+      fps: 2
+    });
+
     await markChunkCompleted(leased.id);
     const parent = await refreshParentJobProgress(leased.parent_job_id);
 
@@ -20,6 +40,8 @@ export async function processOneChunk() {
       worked: true,
       jobId: leased.parent_job_id,
       chunkId: leased.id,
+      framesExtracted: extraction.framesExtracted,
+      outputDir: extraction.outputDir,
       parent
     };
   } catch (error) {

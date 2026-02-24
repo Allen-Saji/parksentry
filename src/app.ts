@@ -13,6 +13,7 @@ import { registerUploadRoutes } from './routes/upload';
 import { registerUploadFileRoutes } from './routes/uploadFile';
 import { registerWorkerRoutes } from './routes/worker';
 import { registerChunkRoutes } from './routes/chunks';
+import { registerMediaRoutes } from './routes/media';
 import { registerAuth } from './plugins/auth';
 import { registerRateLimit } from './plugins/rateLimit';
 
@@ -43,6 +44,7 @@ export async function buildApp() {
   registerUploadFileRoutes(app);
   registerJobsRoutes(app);
   registerChunkRoutes(app);
+  registerMediaRoutes(app);
   registerEventRoutes(app);
   registerDashboardRoutes(app);
   registerWorkerRoutes(app);
