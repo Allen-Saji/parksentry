@@ -2,6 +2,8 @@
 
 Base URL: `http://localhost:8080`
 
+Authentication: `x-api-key: <key>` (required for non-health endpoints when API keys are configured)
+
 ## Health
 
 ### GET `/health`

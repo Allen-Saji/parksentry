@@ -9,6 +9,14 @@
    - `npm run migrate`
 4. Start API:
    - `npm run dev`
+5. Start worker loop (separate terminal):
+   - `npm run worker`
+
+## Authentication
+
+- Set `API_KEYS` in env (comma-separated values)
+- Send one key via `x-api-key` header (or `Authorization: Bearer <key>`)
+- Health endpoints (`/health`, `/ready`) remain public
 
 ## Health checks
 
