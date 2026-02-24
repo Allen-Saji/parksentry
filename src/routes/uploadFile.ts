@@ -10,6 +10,8 @@ import { createChunkJobs } from '../db/repositories/chunksRepo';
 import { makeChunkPlan } from '../domain/chunking';
 import { updateJobProgress } from '../db/repositories/jobsUpdateRepo';
 import { UPLOAD_ROOT } from '../config/paths';
+import { writeAuditLog } from '../db/repositories/auditRepo';
+import { withDbFallback } from '../lib/dbFallback';
 
 export function registerUploadFileRoutes(app: FastifyInstance) {
   app.post('/api/videos/upload-file', async (request, reply) => {
@@ -64,6 +66,17 @@ export function registerUploadFileRoutes(app: FastifyInstance) {
     const chunks = makeChunkPlan(job.id, durationSeconds, 300);
     await createChunkJobs(chunks);
     await updateJobProgress({ id: job.id, stage: 'chunked', status: 'queued', progress: 5 });
+
+    await withDbFallback(
+      () =>
+        writeAuditLog({
+          eventType: 'video_file_uploaded',
+          actor: 'api',
+          requestId: request.id,
+          payload: { assetId, jobId: job.id, cameraId, chunks: chunks.length, sizeBytes: size }
+        }),
+      () => undefined
+    );
 
     return {
       assetId,

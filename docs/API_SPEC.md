@@ -42,6 +42,8 @@ Response:
 
 ### POST `/api/videos/upload`
 (JSON metadata mode)
+Headers:
+- `Idempotency-Key` (optional but recommended in production)
 Request:
 ```json
 {
