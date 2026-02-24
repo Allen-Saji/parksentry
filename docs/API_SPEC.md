@@ -52,8 +52,9 @@ Response:
 {
   "jobId": "job_...",
   "status": "queued",
-  "progress": 0,
-  "stage": "upload_received"
+  "progress": 5,
+  "stage": "chunked",
+  "chunks": 24
 }
 ```
 
@@ -87,6 +88,25 @@ Response:
       "snapshot_url": null
     }
   ]
+}
+```
+
+---
+
+## Dev Worker Simulation
+
+### POST `/api/dev/jobs/:jobId/process-next`
+Advances one queued chunk for demo/testing and updates parent job progress.
+
+Response:
+```json
+{
+  "jobId": "job_...",
+  "chunkId": "chunk_...",
+  "chunkProgress": 100,
+  "done": 7,
+  "total": 24,
+  "overall": 29
 }
 ```
 

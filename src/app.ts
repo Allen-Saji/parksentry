@@ -6,6 +6,8 @@ import { registerSearchRoutes } from './routes/search';
 import { registerJobsRoutes } from './routes/jobs';
 import { registerEventRoutes } from './routes/events';
 import { registerDashboardRoutes } from './routes/dashboard';
+import { registerUploadRoutes } from './routes/upload';
+import { registerWorkerRoutes } from './routes/worker';
 
 export function buildApp() {
   const app = Fastify({ logger });
@@ -18,9 +20,11 @@ export function buildApp() {
 
   registerHealthRoutes(app);
   registerSearchRoutes(app);
+  registerUploadRoutes(app);
   registerJobsRoutes(app);
   registerEventRoutes(app);
   registerDashboardRoutes(app);
+  registerWorkerRoutes(app);
 
   return app;
 }
