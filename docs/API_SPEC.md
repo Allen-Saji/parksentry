@@ -39,6 +39,7 @@ Response:
 ## Upload Jobs
 
 ### POST `/api/videos/upload`
+(JSON metadata mode)
 Request:
 ```json
 {
@@ -58,14 +59,43 @@ Response:
 }
 ```
 
+### POST `/api/videos/upload-file`
+(multipart mode)
+Form fields:
+- `file` (required)
+- `cameraId` (required)
+- `durationSeconds` (required)
+
+Response:
+```json
+{
+  "assetId": "asset_...",
+  "jobId": "job_...",
+  "chunks": 24,
+  "sizeBytes": 12345678,
+  "mimeType": "video/mp4",
+  "checksumSha256": "..."
+}
+```
+
 ### GET `/api/jobs/:jobId/status`
 Response:
 ```json
 {
   "id": "job_...",
   "status": "queued",
-  "progress": 0,
-  "stage": "upload_received"
+  "progress": 5,
+  "stage": "chunked"
+}
+```
+
+### GET `/api/jobs/:jobId/chunks`
+Response:
+```json
+{
+  "jobId": "job_...",
+  "total": 24,
+  "chunks": [{ "id": "chunk_...", "chunk_index": 0, "status": "queued" }]
 }
 ```
 
