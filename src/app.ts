@@ -13,9 +13,14 @@ import { registerUploadRoutes } from './routes/upload';
 import { registerUploadFileRoutes } from './routes/uploadFile';
 import { registerWorkerRoutes } from './routes/worker';
 import { registerChunkRoutes } from './routes/chunks';
+import { registerAuth } from './plugins/auth';
+import { registerRateLimit } from './plugins/rateLimit';
 
-export function buildApp() {
+export async function buildApp() {
   const app = Fastify({ logger });
+
+  await registerRateLimit(app);
+  registerAuth(app);
 
   app.register(multipart, {
     limits: { fileSize: 1024 * 1024 * 1024 } // 1GB
