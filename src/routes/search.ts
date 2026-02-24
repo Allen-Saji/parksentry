@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { parseSearchQuery } from '../domain/queryParser';
-import { searchEvents } from '../domain/eventStore';
+import { searchEventsRepo } from '../db/repositories/eventsRepo';
 
 const SearchBody = z.object({
   query: z.string().min(2)
@@ -17,13 +17,16 @@ export function registerSearchRoutes(app: FastifyInstance) {
     const query = parsed.data.query;
     const intent = parseSearchQuery(query);
 
-    const hits = searchEvents(intent.plate, intent.direction ?? 'any');
+    const hits = await searchEventsRepo({
+      plate: intent.plate,
+      direction: intent.direction ?? 'any'
+    });
 
     return {
       query,
       parsedIntent: intent,
       hits,
-      note: 'Backed by in-memory mock store for MVP scaffold'
+      note: 'Backed by PostgreSQL events table'
     };
   });
 }
