@@ -1,0 +1,3 @@
+ALTER TABLE processing_jobs
+  ADD COLUMN IF NOT EXISTS camera_id TEXT,
+  ADD COLUMN IF NOT EXISTS source_name TEXT;

@@ -2,6 +2,8 @@ import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { parseSearchQuery } from '../domain/queryParser';
 import { searchEventsRepo } from '../db/repositories/eventsRepo';
+import { withDbFallback } from '../lib/dbFallback';
+import { mockEvents } from '../domain/mockData';
 
 const SearchBody = z.object({
   query: z.string().min(2)
@@ -17,10 +19,14 @@ export function registerSearchRoutes(app: FastifyInstance) {
     const query = parsed.data.query;
     const intent = parseSearchQuery(query);
 
-    const hits = await searchEventsRepo({
-      plate: intent.plate,
-      direction: intent.direction ?? 'any'
-    });
+    const hits = await withDbFallback(
+      () =>
+        searchEventsRepo({
+          plate: intent.plate,
+          direction: intent.direction ?? 'any'
+        }),
+      () => mockEvents
+    );
 
     return {
       query,

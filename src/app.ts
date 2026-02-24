@@ -4,6 +4,8 @@ import { env } from './config/env';
 import { registerHealthRoutes } from './routes/health';
 import { registerSearchRoutes } from './routes/search';
 import { registerJobsRoutes } from './routes/jobs';
+import { registerEventRoutes } from './routes/events';
+import { registerDashboardRoutes } from './routes/dashboard';
 
 export function buildApp() {
   const app = Fastify({ logger });
@@ -17,6 +19,8 @@ export function buildApp() {
   registerHealthRoutes(app);
   registerSearchRoutes(app);
   registerJobsRoutes(app);
+  registerEventRoutes(app);
+  registerDashboardRoutes(app);
 
   return app;
 }
