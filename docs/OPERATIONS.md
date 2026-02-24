@@ -17,6 +17,10 @@
 - Set `API_KEYS` in env (comma-separated values)
 - Send one key via `x-api-key` header (or `Authorization: Bearer <key>`)
 - Health endpoints (`/health`, `/ready`) remain public
+- Role header (current phase): `x-roles`
+  - `operator` required for upload endpoints
+  - `worker` required for worker-processing endpoint
+  - `admin` bypasses role checks
 
 ## Health checks
 

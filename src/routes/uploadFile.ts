@@ -12,9 +12,10 @@ import { updateJobProgress } from '../db/repositories/jobsUpdateRepo';
 import { UPLOAD_ROOT } from '../config/paths';
 import { writeAuditLog } from '../db/repositories/auditRepo';
 import { withDbFallback } from '../lib/dbFallback';
+import { requireRole } from '../plugins/rbac';
 
 export function registerUploadFileRoutes(app: FastifyInstance) {
-  app.post('/api/videos/upload-file', async (request, reply) => {
+  app.post('/api/videos/upload-file', { preHandler: requireRole('operator') }, async (request, reply) => {
     const mp = await request.file();
     if (!mp) return reply.status(400).send({ error: 'multipart file is required (field: file)' });
 

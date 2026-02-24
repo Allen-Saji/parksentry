@@ -11,6 +11,7 @@ import { getIdempotency } from '../db/repositories/idempotencyRepo';
 import { saveIdempotency } from '../db/repositories/idempotencyRepo';
 import { getIdempotencyKey, hashRequestBody } from '../lib/idempotency';
 import { writeAuditLog } from '../db/repositories/auditRepo';
+import { requireRole } from '../plugins/rbac';
 
 const UploadBody = z.object({
   cameraId: z.string().min(2),
@@ -19,7 +20,7 @@ const UploadBody = z.object({
 });
 
 export function registerUploadRoutes(app: FastifyInstance) {
-  app.post('/api/videos/upload', async (request, reply) => {
+  app.post('/api/videos/upload', { preHandler: requireRole('operator') }, async (request, reply) => {
     const idemKey = getIdempotencyKey(request);
     const reqHash = hashRequestBody(request.body ?? {});
 

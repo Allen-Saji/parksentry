@@ -1,8 +1,9 @@
 import { FastifyInstance } from 'fastify';
 import { processNextChunk } from '../domain/workerProgress';
+import { requireRole } from '../plugins/rbac';
 
 export function registerWorkerRoutes(app: FastifyInstance) {
-  app.post('/api/dev/jobs/:jobId/process-next', async (request, reply) => {
+  app.post('/api/dev/jobs/:jobId/process-next', { preHandler: requireRole('worker') }, async (request, reply) => {
     const jobId = (request.params as { jobId?: string }).jobId;
     if (!jobId) return reply.status(400).send({ error: 'jobId is required' });
 

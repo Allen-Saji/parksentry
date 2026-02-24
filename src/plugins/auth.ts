@@ -1,5 +1,6 @@
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { API_KEYS, AUTH_ENABLED } from '../config/security';
+import { attachRoles } from './rbac';
 
 const PUBLIC_PATHS = new Set(['/health', '/ready', '/']);
 
@@ -24,6 +25,8 @@ export async function authHook(request: FastifyRequest, reply: FastifyReply) {
   if (!key || !API_KEYS.includes(key)) {
     return reply.status(401).send({ error: 'Unauthorized' });
   }
+
+  attachRoles(request);
 }
 
 export function registerAuth(app: FastifyInstance) {
