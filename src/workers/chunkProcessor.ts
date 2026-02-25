@@ -8,6 +8,8 @@ import { buildChunkCandidates } from '../services/vision/frameCandidateExtractor
 import { insertCandidates } from '../db/repositories/candidatesRepo';
 import { detectVehiclesFromChunkFrames } from '../services/vision/mockDetector';
 import { insertDetections } from '../db/repositories/detectionsRepo';
+import { inferEntryExitEvents } from '../services/vision/entryExitInference';
+import { insertEntryExitEvents } from '../db/repositories/entryExitRepo';
 
 export async function processOneChunk() {
   const leased = await leaseNextChunk();
@@ -54,6 +56,13 @@ export async function processOneChunk() {
     });
     await insertDetections(detections);
 
+    const entryExitEvents = inferEntryExitEvents({
+      jobId: leased.parent_job_id,
+      chunkId: leased.id,
+      detections
+    });
+    await insertEntryExitEvents(entryExitEvents);
+
     await markChunkCompleted(leased.id);
     const parent = await refreshParentJobProgress(leased.parent_job_id);
 
@@ -64,6 +73,7 @@ export async function processOneChunk() {
       framesExtracted: extraction.framesExtracted,
       candidatesCreated: candidates.length,
       detectionsCreated: detections.length,
+      entryExitEventsCreated: entryExitEvents.length,
       outputDir: extraction.outputDir,
       parent
     };

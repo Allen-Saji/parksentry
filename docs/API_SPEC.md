@@ -151,6 +151,23 @@ Response:
 }
 ```
 
+### GET `/api/jobs/:jobId/entry-exit-events`
+Response:
+```json
+{
+  "jobId": "job_...",
+  "total": 14,
+  "events": [
+    {
+      "id": "ee_...",
+      "event_type": "entry",
+      "event_time": "2026-02-25T02:10:15.000Z",
+      "confidence": 0.92
+    }
+  ]
+}
+```
+
 ---
 
 ## Events
