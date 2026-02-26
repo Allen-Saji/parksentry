@@ -114,9 +114,12 @@ So pipeline is structurally wired, but model quality is not production-grade yet
 - Keep interface shape stable (`DetectionInput[]`).
 
 ### Priority 2: Add tracking + proper line crossing
-- Introduce per-frame tracking IDs
-- Implement virtual gate line config and crossing detection by track trajectory
-- Generate entry/exit from crossing, not alternating heuristic
+- Baseline improvement done: event type no longer alternates by index.
+  - It now uses bbox center vs configurable virtual line (`GATE_LINE_X`) in `entryExitInference.ts`.
+  - Event timestamps are now derived from `chunkStartSecond + frameIndex/fps`.
+- Remaining upgrade:
+  - Introduce true per-track IDs across frames
+  - Generate events on *crossing transitions* by trajectory, not static side classification.
 
 ### Priority 3: ANPR pipeline
 - Plate crop detection

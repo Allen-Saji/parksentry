@@ -59,7 +59,9 @@ export async function processOneChunk() {
     const entryExitEvents = inferEntryExitEvents({
       jobId: leased.parent_job_id,
       chunkId: leased.id,
-      detections
+      detections,
+      chunkStartSecond: leased.start_second,
+      fps
     });
     await insertEntryExitEvents(entryExitEvents);
 
