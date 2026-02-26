@@ -3,7 +3,7 @@
 ## Repository
 - **Repo:** https://github.com/Allen-Saji/parksentry
 - **Branch:** `master`
-- **Latest commit:** `7b676ce` — infer entry/exit events from detections and expose query endpoint
+- **Latest commit:** `TBD` — crossing-transition based entry/exit inference (no alternating heuristic)
 
 ## Project Goal
 Parking-area video intelligence backend:
@@ -80,7 +80,7 @@ See `docs/API_SPEC.md` for current request/response examples.
 
 ## Current architecture reality (important)
 - Vision detection is still mocked (`src/services/vision/mockDetector.ts`)
-- Entry/exit inference is heuristic placeholder (`src/services/vision/entryExitInference.ts`)
+- Entry/exit inference is still heuristic, but now upgraded to gate-crossing transition logic per class (no index alternation) in `src/services/vision/entryExitInference.ts`
 - No ANPR plate OCR pipeline yet
 - No real tracking (ByteTrack/DeepSORT) yet
 
