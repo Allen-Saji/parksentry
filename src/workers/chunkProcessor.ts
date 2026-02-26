@@ -6,7 +6,7 @@ import { findAssetPathBySource } from '../db/repositories/assetsQueryRepo';
 import { runChunkFrameExtraction } from '../services/media/chunkRunner';
 import { buildChunkCandidates } from '../services/vision/frameCandidateExtractor';
 import { insertCandidates } from '../db/repositories/candidatesRepo';
-import { detectVehiclesFromChunkFrames } from '../services/vision/mockDetector';
+import { detectVehiclesFromChunkFrames } from '../services/vision/detector';
 import { insertDetections } from '../db/repositories/detectionsRepo';
 import { inferEntryExitEvents } from '../services/vision/entryExitInference';
 import { insertEntryExitEvents } from '../db/repositories/entryExitRepo';

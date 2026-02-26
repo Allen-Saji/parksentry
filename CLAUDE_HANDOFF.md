@@ -106,8 +106,12 @@ So pipeline is structurally wired, but model quality is not production-grade yet
 ## Suggested immediate next steps
 
 ### Priority 1: Replace mock detector
-- Swap `mockDetector` with real detector adapter (Python microservice or local inference runner)
-- Keep interface shape stable (`DetectionInput[]`)
+- Detector routing scaffold is now added via `src/services/vision/detector.ts`:
+  - `DETECTOR_MODE=mock|http`
+  - `DETECTOR_HTTP_ENDPOINT` for external detector service
+  - automatic fallback to mock controlled by `DETECTOR_FALLBACK_MOCK`
+- Next step: point `DETECTOR_HTTP_ENDPOINT` to real detector service and finalize response schema contract.
+- Keep interface shape stable (`DetectionInput[]`).
 
 ### Priority 2: Add tracking + proper line crossing
 - Introduce per-frame tracking IDs
