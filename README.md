@@ -70,6 +70,24 @@ User Query -> NL Parser -> Search Engine -> Event Results + Clips
 
 - `README.md` — project overview
 - `IMPLEMENTATION_PLAN.md` — detailed architecture + delivery phases
+- `docs/DETECTOR_HTTP_CONTRACT.md` — detector service request/response contract
+
+## Detector integration (current)
+
+- Worker detector adapter supports:
+  - `DETECTOR_MODE=mock` (default)
+  - `DETECTOR_MODE=http` + `DETECTOR_HTTP_ENDPOINT`
+- Local detector stub (for integration testing):
+
+```bash
+npm run detector:stub
+```
+
+Then run worker with HTTP mode:
+
+```bash
+DETECTOR_MODE=http DETECTOR_HTTP_ENDPOINT=http://localhost:8000/detect npm run worker
+```
 
 ---
 
